@@ -13,37 +13,48 @@ const CreatePassword = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-      if (password === confirmPassword) {
-        if (chBoxStatus) {
-          try {
-            
-            const apiCreate = "http://localhost:8008/create";
-            const response = await axios.post(apiCreate, {password}, {
+    if (password === confirmPassword) {
+      if (chBoxStatus) {
+        try {
+          const apiCreate = "http://localhost:8008/create";
+          const response = await axios.post(
+            apiCreate,
+            { password },
+            {
               headers: {
                 "Content-Type": "application/json",
               },
-            });            
-            // console.log("all------",response);
-            // console.log("phrase------",response.data.uWallet.seed_phrase);
-            
-            if (response.status === 201) {              
-              navigate("/review-recovery-phase", {state:{seedPhrase:response.data.uWallet.seed_phrase}});
-            } else {
-              toast.error("Wallet creation failed");
             }
-          } catch (error) {
-            toast.error("Internal server error");
+          );
+          // console.log("all------",response);
+          // console.log("phrase------",response.data.uWallet.seed_phrase);
+          // console.log("phrase------",response.data.uWallet._id);
+          const walletId = response.data.uWallet._id;
+          const seed_phrase = response.data.uWallet.seed_phrase;
+
+          console.log("walletId--------------------------",walletId);
+          console.log("seed------------------", seed_phrase);
+          
+          
+
+          if (response.status === 201) {
+            navigate("/review-recovery-phase", {
+              state: { id: walletId, seedPhrase: seed_phrase },
+            });
+          } else {
+            toast.error("Wallet creation failed");
           }
-        } else {
-          toast.error("Please agree terms.");
+        } catch (error) {
+          toast.error("Internal server error");
         }
       } else {
-        toast.error("Password does not match");
+        toast.error("Please agree terms.");
       }
-    
+    } else {
+      toast.error("Password does not match");
+    }
   };
 
-  
   return (
     <div className="flex flex-col bg-zinc-800 text-white h-screen">
       <div className="flex items-start mt-10 ml-60 ">
@@ -116,7 +127,7 @@ const CreatePassword = () => {
                     className="w-full mb-12 text-white focus:ring-4 focus:outline-none font-medium rounded-full text-lg px-5 py-2.5 text-center bg-sky-600 hover:bg-sky-700 focus:ring-sky-800"
                   >
                     Create a new Wallet
-                  </button> 
+                  </button>
                 </div>
               </form>
             </div>

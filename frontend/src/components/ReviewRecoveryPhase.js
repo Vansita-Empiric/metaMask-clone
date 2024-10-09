@@ -1,11 +1,21 @@
 import React from "react";
-import { Link, useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const ReviewRecoveryPhase = () => {
   const location = useLocation();
+  const navigate = useNavigate();
 
+
+  const walletId = location.state.id;
   const seed = location.state.seedPhrase;
   const splitSeed = seed.split(" ");
+
+  const handleSubmit = async () => {
+    navigate("/completion", {
+      state: { id: walletId },
+    });
+  }
+
   return (
     <div className="flex flex-col bg-zinc-800 text-white h-screen">
       <div className="flex items-start mt-10 ml-60 ">
@@ -79,16 +89,17 @@ const ReviewRecoveryPhase = () => {
               </div>
               {/* seed phrase end */}
 
-              <Link to="/completion">
+             
                 <div className="mt-4 flex justify-center">
                   <button
+                    onClick={handleSubmit}
                     type="submit"
                     className="w-1/2 mb-12 text-white focus:ring-4 focus:outline-none font-medium rounded-full text-lg px-5 py-2.5 text-center bg-sky-600 hover:bg-sky-700 focus:ring-sky-800"
                   >
                     Next
                   </button>
                 </div>
-              </Link>
+              
             </div>
           </div>
         </div>

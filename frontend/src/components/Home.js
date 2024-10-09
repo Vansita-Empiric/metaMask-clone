@@ -27,12 +27,47 @@ import {
 } from "react-icons/tb";
 import { GoGraph } from "react-icons/go";
 import { SlArrowLeft } from "react-icons/sl";
+import { useLocation } from "react-router-dom";
+import { toast } from "react-toastify";
+import axios from "axios";
+
 
 const Home = () => {
+  const location = useLocation();
+
+  const walletId = Object(location.state.id);
+
+  console.log("id:--------------",walletId);
+  
+
   const [showModal, setShowModal] = useState(false);
   const [newContent, setNewContent] = useState();
 
-  const handleSubmit = async () => {};
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const apiAddAccount = `http://localhost:8008/createAccount/${walletId}`;
+      
+      const response = await axios.post(
+        apiAddAccount,
+        { name: newContent },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log("response-----------------", response)
+     
+      if (response.status === 201) {
+        toast.success("Account created successfully.")
+      } else {
+        toast.error("Account creation failed");
+      }
+    } catch (error) {
+      toast.error("Internal server error");
+    }
+  };
 
   return (
     <>
