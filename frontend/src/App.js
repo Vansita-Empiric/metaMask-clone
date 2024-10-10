@@ -1,87 +1,37 @@
-import { Suspense, lazy } from "react";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-} from "react-router-dom";
+import { HashRouter as Router, Routes, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import './App.css';
+// import "./App.css";
 
-const Welcome = lazy(() => import("./components/Welcome"));
-const CreatePassword = lazy(() => import("./components/CreatePassword"));
-const ReviewRecoveryPhase = lazy(() => import("./components/ReviewRecoveryPhase"));
-const Complition = lazy(() => import("./components/Complition"));
-const Home = lazy(() => import("./components/Home"));
+import Welcome from "./components/Welcome";
+import CreatePassword from "./components/CreatePassword";
+import ReviewRecoveryPhase from "./components/ReviewRecoveryPhase";
+import Completion from "./components/Completion";
+import Home from "./components/Home";
 
 function App() {
   return (
-    <div>
-        <Router>
-          <Routes>
+    <div
+      style={{
+        minWidth: "400px",
+        width: "auto", 
+        minHeight: "fit-content",
+        height: "auto",
+      }}
+    >
+      <Router>
+        <Routes>
+          <Route path="/" element={<Welcome />} />
+          <Route path="/create-password" element={<CreatePassword />} />
           <Route
-            path="/welcome"
-            element={
-              <Suspense
-                fallback={
-                  <div className="text-center">Home page is loading...</div>
-                }
-              >
-                <Welcome />
-              </Suspense>
-            }
-          />
-          <Route 
-            path="/create-password"
-            element={
-              <Suspense 
-                fallback={
-                  <div className="text-center">Create - Password page is loading...</div>
-                }
-              >
-                <CreatePassword />
-              </Suspense>
-            }
-          />
-          <Route 
             path="/review-recovery-phase"
-            element={
-              <Suspense
-                fallback={
-                  <div className="text-center">Recovery - phase page is loading...</div>
-                }
-              >
-                <ReviewRecoveryPhase />
-              </Suspense>
-            }
+            element={<ReviewRecoveryPhase />}
           />
-          <Route 
-            path="/completion"
-            element={
-              <Suspense 
-                fallback={
-                  <div className="text-center">Completion page is loading...</div>
-                }
-              >
-                <Complition />
-              </Suspense>
-            }
-          />
-          <Route 
-            path="/home"
-            element={
-              <Suspense
-                fallback={
-                  <div className="text-center">Home page is loading...</div>
-                }
-              >
-                <Home />
-              </Suspense>
-            }
-          />
-          </Routes>
-        </Router>
-        <ToastContainer />        
+          <Route path="/completion" element={<Completion />} />
+          <Route path="/home" element={<Home />} />
+        </Routes>
+      </Router>
+      <ToastContainer />
     </div>
   );
 }

@@ -65,6 +65,15 @@ const createEtherAccount = async (req, res) => {
   }
 };
 
+const getConnectedAccounts = async (req, res) => {
+  const findById = await EtherAccount.find({ connectedWalletId: req.params.id });
+  if (!findById) {
+    return console.log("No account found");
+  }
+  console.log(findById);
+  return res.status(200).json({ message: "Account found", findById });
+};
+
 const transactionData = async (req, res) => {
   const id = req.params.id;
   const { receiver, amount } = req.body;
@@ -102,7 +111,7 @@ const transactionData = async (req, res) => {
     );
 
     const findReceiver = await EtherAccount.findOne({ publicKey: receiver });
-    const newBalanceOfReceiver = findReceiver.balance + amount;
+    const newBalanceOfReceiver = Number(findReceiver.balance) + Number(amount);
 
     if(findReceiver) {  
       const updatedBalanceOfReceiver = await EtherAccount.findOneAndUpdate(
@@ -126,4 +135,4 @@ const transactionData = async (req, res) => {
   }
 }
 
-export { createUserWallet, createEtherAccount, transactionData };
+export { createUserWallet, createEtherAccount, getConnectedAccounts, transactionData };
